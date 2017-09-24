@@ -2,7 +2,7 @@ const {mongoose} = require('./../db/mongoose');
 var con = mongoose.connection;
 var collection = con.collection('tweets');
 
-var persisrTweetsInDB = (tweets,accessToken) =>{
+var persistTweetsInDB = (tweets,accessToken) =>{
   collection.remove({
     access:accessToken
   });
@@ -47,7 +47,7 @@ var fetchMostSharedURL = (accessToken) =>{
 
 
 module.exports = {
-persisrTweetsInDB,
+persistTweetsInDB,
 fetchActualTweetsWithURL,
 fetchUserWithMaxURLS,
 fetchMostSharedURL

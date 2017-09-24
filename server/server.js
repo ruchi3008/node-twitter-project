@@ -24,10 +24,10 @@ var _requestSecret;
 app.get("/", function(req, res) {
       res.render('index');
    });
-app.post("/welcome", function(req, res) {
+app.post("/access", function(req, res) {
        twitter.getRequestToken(function(err, requestToken, requestSecret,results) {
            if (err)
-               res.status(500).send(err);
+               res.status(500).render('error',{errMsg:'Oops!!You cant access this app'});
            else {
                _requestSecret = requestSecret;
                console.log(results);
@@ -37,15 +37,15 @@ app.post("/welcome", function(req, res) {
    });
 
 app.get('/details',(req,res) => {
-  var requestToken = req.query.oauth_token,
-     verifier = req.query.oauth_verifier;
+   var requestToken = req.query.oauth_token,
+      verifier = req.query.oauth_verifier;
        twitter.getAccessToken(requestToken, _requestSecret, verifier, function(err, accessToken, accessSecret) {
            if (err)
-               res.status(500).send(err);
+               res.status(500).render('error',{errMsg:'Oops!! Authentication Failed'});
            else
                twitter.verifyCredentials(accessToken, accessSecret, function(err, user) {
                    if (err)
-                       res.status(500).send(err);
+                       res.status(500).render('error',{errMsg:'Oops!! Authentication Failed'});
                    else{
                        var client = new twitterClient({
                           consumer_key: consumerKey,
@@ -53,12 +53,11 @@ app.get('/details',(req,res) => {
                           access_token_key: accessToken,
                           access_token_secret: accessSecret
                         });
-
                         var params = {};
                         client.get('statuses/home_timeline', params, function(error, tweets, response) {
                         if (!error) {
 
-                        queries.persisrTweetsInDB(tweets,accessToken);
+                        queries.persistTweetsInDB(tweets,accessToken);
 
                         var completeData = new Object();
                         queries.fetchActualTweetsWithURL(accessToken).then((data) =>{
@@ -70,10 +69,9 @@ app.get('/details',(req,res) => {
                                 res.render('details',{completeData});
                               });
                             });
-
                         }).catch((err)=>{
                            console.log(err);
-                           return(200).send(err);
+                           res.status(200).render('error',{errMsg:'Oops!! Something went wrong connecting with the database'});
                         });
                        }
                      });
