@@ -21,6 +21,9 @@ var twitter = new twitterAPI({
 });
 var _requestSecret;
 
+app.get("/", function(req, res) {
+      res.render('index');
+   });
 app.post("/welcome", function(req, res) {
        twitter.getRequestToken(function(err, requestToken, requestSecret,results) {
            if (err)
