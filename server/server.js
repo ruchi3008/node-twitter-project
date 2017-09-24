@@ -60,15 +60,25 @@ app.get('/details',(req,res) => {
                         queries.persistTweetsInDB(tweets,accessToken);
 
                         var completeData = new Object();
-                        queries.fetchActualTweetsWithURL(accessToken).then((data) =>{
+                        // queries.fetchActualTweetsWithURL(accessToken).then((data) =>{
+                        //   completeData.first = data;
+                        //   queries.fetchUserWithMaxURLS(accessToken).then((data) => {
+                        //     completeData.second = data;
+                        //       queries.fetchMostSharedURL(accessToken).then((data) => {
+                        //       completeData.third = data;
+                        //         res.render('details',{completeData});
+                        //       });
+                        //     });
+                        // }).catch((err)=>{
+                        //    console.log(err);
+                        //    res.status(200).render('error',{errMsg:'Oops!! Something went wrong connecting with the database'});
+                        // });
+
+                        async queries.fetchActualTweetsWithURL(accessToken).then((data) =>{
                           completeData.first = data;
-                          queries.fetchUserWithMaxURLS(accessToken).then((data) => {
-                            completeData.second = data;
-                              queries.fetchMostSharedURL(accessToken).then((data) => {
-                              completeData.third = data;
-                                res.render('details',{completeData});
-                              });
-                            });
+                          completeData.second = await queries.fetchUserWithMaxURLS(accessToken);
+                          completeData.third  = await queries.fetchMostSharedURL(accessToken);
+                          res.render('details',{completeData});
                         }).catch((err)=>{
                            console.log(err);
                            res.status(200).render('error',{errMsg:'Oops!! Something went wrong connecting with the database'});
