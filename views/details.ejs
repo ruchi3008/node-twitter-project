@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>
+    My First self done Nodejs page
+  </title>
+  <link rel="stylesheet" type="text/css" href="./css/bootstrap.min.css">
+</head>
+<body>
+   <div class="container">
+    <div class="jumbotron">
+  <h4>Actual Tweets with URLs</h4>
+  <ul>
+    <% completeData.first.forEach(function(tweet) { %>
+        <li><%= tweet.text %></li>
+    <% }); %>
+ </ul>
+ <h4><%=completeData.second[0]._id%> has shared the most number of links(<%=completeData.second[0].count%>)</h4>
+ <h4><%=completeData.third[0]._id%> is the mosts shared link(<%=completeData.third[0].count%>)</h4>
+</div>
+ </div>
+
+ <script src="./js/jquery-3.2.1.min.js"></script>
+ <script src="./js/bootstrap.min.js"></script>
+
+</body>
